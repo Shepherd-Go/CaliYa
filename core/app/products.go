@@ -23,12 +23,22 @@ func (p *productsApp) RegisterProduct(ctx context.Context) error {
 	return nil
 }
 
-func (p *productsApp) GetProducts(ctx context.Context) (*models.ProductsShops, error) {
+func (p *productsApp) GetProductsBy(ctx context.Context, crieria models.SearchProductsBy) (*models.ProductsShops, error) {
 
-	products, err := p.repo.GetProducts(ctx)
+	products, err := p.repo.GetProductsBy(ctx, crieria)
 	if err != nil {
 		return products, err
 	}
 
 	return products, nil
+}
+
+func (p *productsApp) GetCombos(ctx context.Context) ([]models.Combos, error) {
+
+	combos, err := p.repo.GetCombos(ctx)
+	if err != nil {
+		return []models.Combos{}, err
+	}
+
+	return combos, nil
 }

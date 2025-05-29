@@ -1,14 +1,13 @@
 package models
 
 import (
-	"context"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 )
 
-type Items struct {
+type Combos struct {
 	bun.BaseModel `bun:"table:products.items"`
 
 	ID          uuid.UUID `bun:"id,pk,type:uuid,default:uuid_generate_v4()" json:"id"`
@@ -21,20 +20,6 @@ type Items struct {
 	CreatedAt   time.Time `bun:"created_at,default:now()" json:"-"`
 	UpdatedAt   time.Time `bun:"updated_at,default:now()" json:"-"`
 	DeletedAt   time.Time `bun:"deleted_at" json:"-"`
-}
 
-type ItemsOrders struct {
-	bun.BaseModel `bun:"table:business.order_items"`
-
-	ItemID      uuid.UUID `bun:"item_id" json:"item_id" validate:"required,uuid4" mold:"trim"`
-	OrderID     uuid.UUID `bun:"order_id"`
-	CantItem    int       `bun:"cant_item" json:"cant_item" validate:"required" mold:"trim"`
-	UnitPrice   int       `bun:"unit_price"`
-	TotalPrice  int       `bun:"total_price"`
-	Observation string    `bun:"observation" json:"observation"`
-}
-
-func (io *ItemsOrders) Validate() error {
-	_ = conform.Struct(context.Background(), io)
-	return validate.Struct(io)
+	ProductsShops ProductsShops `bun:"rel:belongs-to,join:shop_id=id" json:"shop"`
 }
